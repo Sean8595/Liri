@@ -15,23 +15,46 @@ for (var i = 3; i < input.length; i++) {
         searchResult += input[i];
     }
   }
+function heyLiri(){
 switch(command){
 case "concert-this":
     console.log("concert-this");
-    var searchResult = process.argv[3]
     var queryUrl ="https://rest.bandsintown.com/artists/" + searchResult + "/events?app_id=codingbootcamp";
     axios.get(queryUrl).then(
         function(response) {
-            console.log(response.ArtistData[0].venue)
-        });
+            for (let i = 0; i < 5; i++)  
+                
+            
+            if ((response.data.length > 0) && (Array.isArray(response.data))) {
+            console.log(response.data[i].venue.name)
+            console.log(response.data[i].venue.city)
+            console.log(response.data[i].datetime)
+            console.log("######################################")
+            
+            //response.data is an array, loop over the array and show the user the upcoming shows)
+            //tell the user there are no shows for that band)
+            }
+            else {
+                console.log("No bands on tour by that name")
+            }
+            }
+        );
     break;
 case "spotify-this-song":
         console.log("Spotify this song");
-        var queryUrl = "https://api.spotify.com/v1/" + searchResult;
-        axios.get(queryUrl).then(
-            function(response) {
-                console.log(response)
-            });
+        spotify.search({ type: 'track', query: searchResult }, function(err, data) {
+            if (err) {
+              return console.log('Error occurred: ' + err);
+            }
+            for (var i=0; i < 1; i++) {
+                console.log("############################")
+                console.log("Artist is " + data.tracks.items[i].artists[i].name);
+                console.log("Song Name " + data.tracks.items[i].name)
+                console.log("Album is " + data.tracks.items[i].album.name); 
+                console.log("Get a sample of that song at " + data.tracks.items[i].href)
+                
+            }
+          });
     break;
 
 case "movie-this":
@@ -40,6 +63,7 @@ case "movie-this":
         var queryUrl = "http://www.omdbapi.com/?t=" + searchResult + "&y=&plot=short&apikey=trilogy";
         axios.get(queryUrl).then(
           function(response) { 
+            console.log("############################")
             console.log("Title is " + response.data.Title);
             console.log("Release year is " + response.data.Year);
             console.log("IMDB Rating is " + response.data.Ratings[0].Value);
@@ -52,15 +76,24 @@ case "movie-this":
 case "do-what-it-says":
     console.log("Did what it said");
     fs.readFile("random.txt", "utf8", function(err, data) {
-    })
+    var newData = data.split(" ,");
+    console.log(newData[0]);
+    command = newData[0];
+    searchResult = newData[1];
+    heyLiri();
+    
+}
+    )
+    
     break;
     
 default:
     console.log("I dont understand this command");
     break;
 }
+}
 
-
+heyLiri();
 //var request is process.argv of anything 3 or greater
 
 //switch statement to see what the command is 
